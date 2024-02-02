@@ -39,4 +39,20 @@ class CashCardController {
                 .toUri();
         return ResponseEntity.created(locationOfNewCashCard).build();
     }
+
+    // @GetMapping()
+    // private ResponseEntity<Iterable<CashCard>> findAll() {
+    //     return ResponseEntity.ok(cashCardRepository.findAll());
+    // }
+
+    @GetMapping
+    private ResponseEntity<List<CashCard>> findAll(Pageable pageable) {
+        Page<CashCard> page = cashCardRepository.findAll(
+                PageRequest.of(
+                        pageable.getPageNumber(),
+                        pageable.getPageSize(),
+                        pageable.getSortOr(Sort.by(Sort.Direction.ASC,"amount"))));
+                       // pageable.getSort()));
+        return ResponseEntity.ok(page.getContent());
+    }
 }
